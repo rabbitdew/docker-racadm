@@ -1,9 +1,13 @@
-FROM centos:6.6
+FROM centos:7
 
-RUN yum install wget perl dmidecode -y
+RUN yum -y install wget perl dmidecode openssl openssl-devel
 
-RUN wget -q -O - http://linux.dell.com/repo/hardware/latest/bootstrap.cgi | bash && yum -y install srvadmin-idrac
+WORKDIR /tmp
+RUN wget http://linux.dell.com/repo/hardware/latest/bootstrap.cgi 
+RUN bash /tmp/bootstrap.cgi 
+RUN yum -y install srvadmin-idrac
 
 COPY entrypoint.sh /
 
 ENTRYPOINT ["/entrypoint.sh"]
+
